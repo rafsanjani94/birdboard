@@ -14,3 +14,30 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+/**
+ * TESTING WITH ROUTE->VIEWS
+ */
+// Route::get('/projects', function () {
+//     $projects = App\Project::all();
+
+//     return view('projects.index', compact('projects'));
+// });
+
+// Route::post('/projects', function () {
+//     //validate
+
+//     //presist
+//     App\Project::create(request(['title', 'description']));
+
+//     //redirect
+// });
+
+
+
+/**
+ * TESTING WITH ROUTE->CONTROLLER
+ */
+Route::get('/projects', 'ProjectsController@index');
+
+Route::post('/projects', 'ProjectsController@store');
