@@ -39,5 +39,9 @@ Route::get('/', function () {
  * TESTING WITH ROUTE->CONTROLLER
  */
 Route::get('/projects', 'ProjectsController@index');
+Route::get('/projects/{project}', 'ProjectsController@show');
+Route::post('/projects', 'ProjectsController@store')->middleware('auth');
 
-Route::post('/projects', 'ProjectsController@store');
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
