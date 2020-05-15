@@ -34,14 +34,18 @@ Route::get('/', function () {
 // });
 
 
+Route::group(['middleware' => 'auth'], function() {
+    /**
+     * TESTING WITH ROUTE->CONTROLLER
+     */
+    Route::get('/projects', 'ProjectsController@index');
+    Route::get('/projects/{project}', 'ProjectsController@show');
+    Route::post('/projects', 'ProjectsController@store');
 
-/**
- * TESTING WITH ROUTE->CONTROLLER
- */
-Route::get('/projects', 'ProjectsController@index');
-Route::get('/projects/{project}', 'ProjectsController@show');
-Route::post('/projects', 'ProjectsController@store')->middleware('auth');
+    Route::get('/home', 'HomeController@index')->name('home');
+});
+
+
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');

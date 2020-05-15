@@ -11,14 +11,30 @@ class ProjectsTest extends TestCase
     use WithFaker, RefreshDatabase;
 
     // test owner
-    public function test_only_authenticated_user_can_create_project()
+    /** @test */
+    public function guests_cannot_create_project()
     {
         $attributes = \factory('App\Project')->raw();
 
         $this->post('/projects', $attributes)->assertRedirect('login');
     }
 
-    public function test_a_user_can_create_a_project()
+    /** @test */
+    public function guests_cannot_view_project()
+    {
+        $this->get('/projects')->assertRedirect('login');
+    }
+
+    /** @test */
+    public function guests_cannot_view_a_single_project()
+    {
+        $project = \factory('App\Project')->create();
+
+        $this->get($project->path())->assertRedirect('login');
+    }
+
+    /** @test */
+    public function a_user_can_create_a_project()
     {
         // $this->withoutExceptionHandling();
         $this->actingAs(\factory('App\User')->create()); //for login auth
@@ -34,21 +50,36 @@ class ProjectsTest extends TestCase
         $this->assertDatabaseHas('projects', $attributes);
 
         $this->get('/projects')->assertSee($attributes['title']); //route
-
     }
-
-    // test model
-    public function test_a_user_can_view_a_project()
+    
+    /** @test */
+    public function a_user_can_view_their_project()
     {
+        $this->be(\factory('App\User')->create()); //for login auth
+        
         $this->withoutExceptionHandling();
 
-        $project = \factory('App\Project')->create();
+        $project = \factory('App\Project')->create(['owner_id' => auth()->id()]);
 
         $this->get($project->path())->assertSee($project->title)->assertSee($project->description); //route
     }
 
+    
+    /** @test */
+    public function an_authenticated_user_cannot_view_the_projects_of_others()
+    {
+        $this->be(\factory('App\User')->create()); //for login auth
+        
+        // $this->withoutExceptionHandling();
+
+        $project = \factory('App\Project')->create();
+
+        $this->get($project->path())->assertStatus(403);
+    }
+
     // test req. validation
-    public function test_a_project_requires_a_title()
+    /** @test */
+    public function a_project_requires_a_title()
     {
         // $this->withoutExceptionHandling();
         $this->actingAs(\factory('App\User')->create()); //for login auth
@@ -60,7 +91,8 @@ class ProjectsTest extends TestCase
     }
 
     // test req. validation
-    public function test_a_project_requires_a_description()
+    /** @test */
+    public function a_project_requires_a_description()
     {
         $this->actingAs(\factory('App\User')->create());
 
