@@ -50,7 +50,7 @@ class ProjectsController extends Controller
         // \dd($attributes);
 
         //insert hasMany
-        \auth()->user()->projects()->create(
+        $project = \auth()->user()->projects()->create(
             $attributes
         );
 
@@ -58,6 +58,6 @@ class ProjectsController extends Controller
         // Project::create($attributes);
 
         //redirect
-        return redirect('/projects');
+        return redirect($project->path());
     }
 }
