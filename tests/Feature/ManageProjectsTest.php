@@ -37,7 +37,7 @@ class ManageProjectsTest extends TestCase
         ];
 
         //route, bisa juga assert redirect
-        $this->post('/projects', $attributes)->assertRedirect('/projects');
+        $this->post('/projects', $attributes);
 
         $this->assertDatabaseHas('projects', $attributes);
 

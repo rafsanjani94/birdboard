@@ -15,7 +15,13 @@
 
                 @foreach ($project->tasks as $task)
                     <div class="bg-white rounded shadow p-3 mb-4" style="height: 50px">
-                        {{ $task->body }}
+                        <form action="{{ $project->path() . '/tasks/' . $task->id }}" method="post">
+                            @method('PATCH')
+                            @csrf
+
+                            <input type="text" name="body" value="{{ $task->body }}" style="width: 95%;" class="{{ $task->completed ? 'text-muted' : '' }}">
+                            <input type="checkbox" name="completed" onchange="this.form.submit()" {{ $task->completed ? 'checked' : '' }}>
+                        </form>
                     </div>
                 @endforeach
 
