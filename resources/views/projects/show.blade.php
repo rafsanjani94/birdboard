@@ -35,7 +35,14 @@
             <div>
                 <h5 class="text-muted">General Notes</h5>
 
-                <textarea style="height: 200px" class="form-control shadow">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nam omnis sed veritatis veniam corporis rem dolore mollitia quibusdam placeat temporibus? Nesciunt repellendus voluptatum quod eligendi alias minus quam itaque vitae!</textarea>
+                <form action="{{ $project->path() }}" method="post">
+                    @csrf
+                    @method('PATCH')
+
+                    <textarea style="height: 200px" class="form-control shadow mb-4" name="notes" placeholder="lorem ..">{{ $project->notes }}</textarea>
+
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
             </div>
         </div>
 
